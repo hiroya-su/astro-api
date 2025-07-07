@@ -5,6 +5,7 @@ from flatlib.datetime import Datetime
 from flatlib.geopos import GeoPos
 from datetime import datetime
 import traceback
+from flatlib import const
 
 app = Flask(__name__)
 CORS(app)
@@ -32,13 +33,13 @@ def get_zodiac():
         chart = Chart(dt, pos)
 
         result = {
-            "太陽": chart.get("SUN").sign,
-            "月": chart.get("MOON").sign,
-            "水星": chart.get("MERCURY").sign,
-            "金星": chart.get("VENUS").sign,
-            "火星": chart.get("MARS").sign,
-            "木星": chart.get("JUPITER").sign,
-            "土星": chart.get("SATURN").sign,
+            "太陽": chart.get(const.SUN).sign,
+            "月": chart.get(const.MOON).sign,
+            "水星": chart.get(const.MERCURY).sign,
+            "金星": chart.get(const.VENUS).sign,
+            "火星": chart.get(const.MARS).sign,
+            "木星": chart.get(const.JUPITER).sign,
+            "土星": chart.get(const.SATURN).sign,
             "アドバイス": "自分の太陽星座の個性を信じてください✨"
         }
 
