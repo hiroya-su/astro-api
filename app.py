@@ -5,6 +5,9 @@ from flatlib.datetime import Datetime
 from flatlib.geopos import GeoPos
 from datetime import datetime
 
+app = Flask(__name__)
+CORS(app)
+
 @app.route('/get_zodiac', methods=['POST'])
 def get_zodiac():
     try:
