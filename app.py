@@ -3,6 +3,7 @@ from flask_cors import CORS
 from flatlib.chart import Chart
 from flatlib.datetime import Datetime
 from flatlib.geopos import GeoPos
+from datetime import datetime  # ← 追加
 
 app = Flask(__name__)
 CORS(app)
@@ -11,12 +12,17 @@ CORS(app)
 def get_zodiac():
     try:
         data = request.get_json()
-        date = data['date']
+
+        # 📌 日付フォーマットを修正： '1989-10-11' → '1989/10/11'
+        raw_date = data['date']
+        date_obj = datetime.strptime(raw_date, '%Y-%m-%d')
+        formatted_date = date_obj.strftime('%Y/%m/%d')
+
         time = data['time']
         lat = float(data['lat'])
         lon = float(data['lon'])
 
-        dt = Datetime(date, time, '+09:00')
+        dt = Datetime(formatted_date, time, '+09:00')
         pos = GeoPos(lat, lon)
         chart = Chart(dt, pos)
 
