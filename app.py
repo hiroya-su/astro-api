@@ -12,20 +12,26 @@ CORS(app)
 def get_zodiac():
     try:
         data = request.get_json()
+        print("📥 受け取ったデータ：", data)
 
-        # 日付変換 '1989-10-11' → '1989/10/11'
         raw_date = data['date']
+        time = data['time']
+        lat = float(data['lat'])
+        lon = float(data['lon'])
+
+        # 日付の変換
         date_obj = datetime.strptime(raw_date, '%Y-%m-%d')
         formatted_date = date_obj.strftime('%Y/%m/%d')
 
-        time = data['time']
-        lat = float(data['lat'])  # ✅ floatのまま
-        lon = float(data['lon'])  # ✅ floatのまま
+        print("📅 変換後の日付：", formatted_date)
+        print("🕒 時間：", time)
+        print("📍 緯度経度：", lat, lon)
 
         dt = Datetime(formatted_date, time, '+09:00')
-        pos = GeoPos(lat, lon)  # ✅ str()なしで渡す！
-
+        pos = GeoPos(lat, lon)
         chart = Chart(dt, pos)
+
+        print("✅ チャート生成成功")
 
         result = {
             "太陽": chart.get("SUN").sign,
@@ -40,6 +46,7 @@ def get_zodiac():
 
         return jsonify(result)
     except Exception as e:
+        print("❌ エラー内容：", e)
         return jsonify({"error": str(e)}), 400
 
 if __name__ == '__main__':
