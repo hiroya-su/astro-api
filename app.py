@@ -43,9 +43,7 @@ def get_zodiac():
         }
 
         return jsonify(result)
-    except Exception as e:
-        print("❌ エラー内容：", e)
-        return jsonify({"error": str(e)}), 400
+
     except Exception as e:
         print("❌ エラー内容：", e)
         return jsonify({"error": str(e)}), 400
