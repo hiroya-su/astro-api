@@ -4,6 +4,7 @@ from flatlib.chart import Chart
 from flatlib.datetime import Datetime
 from flatlib.geopos import GeoPos
 from datetime import datetime
+import traceback
 
 app = Flask(__name__)
 CORS(app)
@@ -15,7 +16,7 @@ def get_zodiac():
         print("📥 受け取ったデータ：", data)
 
         raw_date = data['date']
-        time_str = data['time']
+        time = data['time']
         lat = float(data['lat'])
         lon = float(data['lon'])
 
@@ -23,15 +24,10 @@ def get_zodiac():
         name = data.get('name', '')
         worry = data.get('worry', '')
 
-        # time の形式が "HH:MM" の場合は "HH:MM:00" に補完
-        if len(time_str.split(':')) == 2:
-            time_str += ':00'
-
-        # "YYYY-MM-DD" → "YYYY/MM/DD"
         date_obj = datetime.strptime(raw_date, '%Y-%m-%d')
         formatted_date = date_obj.strftime('%Y/%m/%d')
 
-        dt = Datetime(formatted_date, time_str, '+09:00')
+        dt = Datetime(formatted_date, time, '+09:00')
         pos = GeoPos(lat, lon)
         chart = Chart(dt, pos)
 
@@ -48,12 +44,10 @@ def get_zodiac():
 
         return jsonify(result)
 
-   except Exception as e:
-    import traceback
-    traceback.print_exc()
-    print("❌ エラー内容（str）:", str(e))
-    return jsonify({"error": str(e)}), 400
-
+    except Exception as e:
+        traceback.print_exc()
+        print("❌ エラー内容（str）:", str(e))
+        return jsonify({"error": str(e)}), 400
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=10000)
