@@ -16,29 +16,19 @@ def get_zodiac():
 
         raw_date = data['date']
         time = data['time']
-
-        # 秒が無ければ追加
-        if len(time.split(':')) == 2:
-            time += ':00'
-
         lat = float(data['lat'])
         lon = float(data['lon'])
 
+        # name や worry は使わないが、エラー防止で受け取る
+        name = data.get('name', '')
+        worry = data.get('worry', '')
+
         date_obj = datetime.strptime(raw_date, '%Y-%m-%d')
         formatted_date = date_obj.strftime('%Y/%m/%d')
-
-
-        date_obj = datetime.strptime(raw_date, '%Y-%m-%d')
-        formatted_date = date_obj.strftime('%Y/%m/%d')
-        print("📅 日付変換後：", formatted_date)
-        print("🕒 時刻：", time)
-        print("📍 緯度・経度：", lat, lon)
 
         dt = Datetime(formatted_date, time, '+09:00')
         pos = GeoPos(lat, lon)
         chart = Chart(dt, pos)
-
-        print("✅ チャート生成成功")
 
         result = {
             "太陽": chart.get("SUN").sign,
@@ -52,7 +42,6 @@ def get_zodiac():
         }
 
         return jsonify(result)
-
     except Exception as e:
         print("❌ エラー内容：", e)
         return jsonify({"error": str(e)}), 400
