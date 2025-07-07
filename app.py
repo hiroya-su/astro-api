@@ -5,10 +5,11 @@ from flatlib.datetime import Datetime
 from flatlib.geopos import GeoPos
 from datetime import datetime
 import traceback
-from flatlib import const
+from flask_cors import CORS
 
-app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "https://hiroya-su.github.io"}}, supports_credentials=True)
+# CORS設定を厳密に記述
+CORS(app, resources={r"/get_zodiac": {"origins": "https://hiroya-su.github.io"}}, supports_credentials=True)
+
 
 
 @app.route('/get_zodiac', methods=['POST'])
