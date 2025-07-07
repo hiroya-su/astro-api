@@ -16,8 +16,17 @@ def get_zodiac():
 
         raw_date = data['date']
         time = data['time']
+
+        # 秒が無ければ追加
+        if len(time.split(':')) == 2:
+            time += ':00'
+
         lat = float(data['lat'])
         lon = float(data['lon'])
+
+        date_obj = datetime.strptime(raw_date, '%Y-%m-%d')
+        formatted_date = date_obj.strftime('%Y/%m/%d')
+
 
         date_obj = datetime.strptime(raw_date, '%Y-%m-%d')
         formatted_date = date_obj.strftime('%Y/%m/%d')
