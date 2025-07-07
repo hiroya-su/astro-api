@@ -48,9 +48,12 @@ def get_zodiac():
 
         return jsonify(result)
 
-    except Exception as e:
-        print("❌ エラー内容：", e)
-        return jsonify({"error": str(e)}), 400
+   except Exception as e:
+    import traceback
+    traceback.print_exc()
+    print("❌ エラー内容（str）:", str(e))
+    return jsonify({"error": str(e)}), 400
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=10000)
