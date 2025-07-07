@@ -8,7 +8,8 @@ import traceback
 from flatlib import const
 
 app = Flask(__name__)
-CORS(app, origins=["https://hiroya-su.github.io"]) 
+CORS(app, resources={r"/*": {"origins": "https://hiroya-su.github.io"}}, supports_credentials=True)
+
 
 @app.route('/get_zodiac', methods=['POST'])
 def get_zodiac():
