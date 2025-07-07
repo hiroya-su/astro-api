@@ -4,16 +4,19 @@ from flatlib.chart import Chart
 from flatlib.datetime import Datetime
 from flatlib.geopos import GeoPos
 from datetime import datetime
-import traceback
 from flatlib import const
+import traceback
 
 app = Flask(__name__)
 
-# ✅ app を定義した後に CORS を設定
+# 👇 GitHub Pagesだけを許可（ワイルドカードは使わない）
 CORS(app, resources={r"/get_zodiac": {"origins": "https://hiroya-su.github.io"}}, supports_credentials=True)
 
-@app.route('/get_zodiac', methods=['POST'])
+@app.route('/get_zodiac', methods=['POST', 'OPTIONS'])
 def get_zodiac():
+    if request.method == 'OPTIONS':
+        return '', 200  # Preflight用の応答
+
     try:
         data = request.get_json()
         print("📥 受け取ったデータ：", data)
@@ -23,7 +26,6 @@ def get_zodiac():
         lat = float(data['lat'])
         lon = float(data['lon'])
 
-        # name や worry は使わないが、エラー防止で受け取る
         name = data.get('name', '')
         worry = data.get('worry', '')
 
@@ -49,7 +51,6 @@ def get_zodiac():
 
     except Exception as e:
         traceback.print_exc()
-        print("❌ エラー内容（str）:", str(e))
         return jsonify({"error": str(e)}), 400
 
 if __name__ == '__main__':
