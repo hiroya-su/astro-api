@@ -5,9 +5,6 @@ from flatlib.datetime import Datetime
 from flatlib.geopos import GeoPos
 from datetime import datetime
 
-app = Flask(__name__)
-CORS(app)
-
 @app.route('/get_zodiac', methods=['POST'])
 def get_zodiac():
     try:
@@ -19,13 +16,11 @@ def get_zodiac():
         lat = float(data['lat'])
         lon = float(data['lon'])
 
-        # 日付の変換
         date_obj = datetime.strptime(raw_date, '%Y-%m-%d')
         formatted_date = date_obj.strftime('%Y/%m/%d')
-
-        print("📅 変換後の日付：", formatted_date)
-        print("🕒 時間：", time)
-        print("📍 緯度経度：", lat, lon)
+        print("📅 日付変換後：", formatted_date)
+        print("🕒 時刻：", time)
+        print("📍 緯度・経度：", lat, lon)
 
         dt = Datetime(formatted_date, time, '+09:00')
         pos = GeoPos(lat, lon)
@@ -45,6 +40,9 @@ def get_zodiac():
         }
 
         return jsonify(result)
+    except Exception as e:
+        print("❌ エラー内容：", e)
+        return jsonify({"error": str(e)}), 400
     except Exception as e:
         print("❌ エラー内容：", e)
         return jsonify({"error": str(e)}), 400
