@@ -23,7 +23,7 @@ def get_zodiac():
         lon = float(data['lon'])
 
         dt = Datetime(formatted_date, time, '+09:00')
-        pos = GeoPos(lat, lon)
+        pos = GeoPos(str(lat), str(lon))
         chart = Chart(dt, pos)
 
         result = {
