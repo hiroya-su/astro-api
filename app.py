@@ -10,9 +10,9 @@ import traceback
 app = Flask(__name__)
 
 # 👇 GitHub Pagesだけを許可（ワイルドカードは使わない）
-CORS(app, resources={r"/get_zodiac": {"origins": "https://hiroya-su.github.io"}}, supports_credentials=True)
+CORS(app, origins="*")
 
-@app.route('/get_zodiac', methods=['POST', 'OPTIONS'])
+@app.route('/get_zodiac', methods=['POST'])
 def get_zodiac():
     if request.method == 'OPTIONS':
         return '', 200  # Preflight用の応答
